@@ -1,0 +1,156 @@
+/* Navigation Styles */
+.navbar {
+  background: var(--primary);
+  padding: 15px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-link {
+  color: white !important;
+  text-decoration: none;
+  padding: 6px 12px;
+  border-radius: 6px;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  position: relative;
+}
+
+.nav-link:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.nav-link.active {
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.nav-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24px;
+  height: 3px;
+  background: white;
+  border-radius: 2px;
+}
+
+.nav-button {
+  background: transparent;
+  border: none;
+  color: white !important;
+  cursor: pointer;
+  padding: 6px 12px;
+  border-radius: 6px;
+  opacity: 0.9;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.nav-button:hover {
+  opacity: 1;
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Brand Styles */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: white;
+}
+
+.brand .logo {
+  background: rgba(255, 255, 255, 0.2);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1.2em;
+}
+
+.brand div {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+/* Table Text Styles */
+tbody tr td {
+  color: var(--text-color) !important;
+  font-weight: 500;
+  font-size: 0.95em;
+}
+
+.dark tbody tr td {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+.cell-content {
+  position: relative;
+  padding: 4px 0;
+  transition: transform 0.3s ease;
+}
+
+tr:hover .cell-content {
+  transform: scale(1.02);
+}
+
+/* Status Styles */
+.status-active, .status-inactive {
+  font-weight: 600 !important;
+  opacity: 1 !important;
+}
+
+/* Make text visible in dark mode */
+.dark .status-active {
+  color: var(--success) !important;
+  background: color-mix(in srgb, var(--success) 15%, transparent);
+}
+
+.dark .status-inactive {
+  color: var(--danger) !important;
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
+}
+
+/* Enhanced Form Text */
+form label, form input, form select {
+  color: var(--text-color) !important;
+  font-weight: 500;
+}
+
+.dark form label, .dark form input, .dark form select {
+  color: rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Ensure button text is visible */
+.btn {
+  color: white !important;
+  font-weight: 500;
+}
+
+/* Table Headers */
+thead th {
+  color: var(--text-color) !important;
+  font-weight: 600;
+  opacity: 0.9;
+}

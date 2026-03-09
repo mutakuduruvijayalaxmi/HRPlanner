@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HR Planner | Login</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="login-body">
+  <div class="login-container" role="main" aria-labelledby="brandTitle">
+    <h1 id="brandTitle">HR Planner</h1>
+
+    <!-- Login form updated to use floating labels and enhanced button styles -->
+    <form id="loginForm" novalidate>
+      <div class="form-field">
+        <input type="text" id="username" name="username" placeholder=" " autocomplete="username" required />
+        <label for="username">Username</label>
+      </div>
+
+      <div class="form-field">
+        <input type="password" id="password" name="password" placeholder=" " autocomplete="current-password" required />
+        <label for="password">Password</label>
+      </div>
+
+      <button type="submit" class="btn" aria-label="Login to HR Planner">Login</button>
+
+      <p class="error small text-muted" id="errorMsg" role="alert" aria-live="polite"></p>
+    </form>
+
+    <a href="#" class="forgot small">Forgot Password?</a>
+
+    <p class="demo-note small">Demo credentials: <strong>hr</strong> / <strong>1234</strong></p>
+  </div>
+
+  <!-- Toast container used by script.js for in-app notifications -->
+  <div class="toast-wrap" id="toastWrap" aria-hidden="true"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>HR Planner | Jobs</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.extras.css" />
+</head>
+<body>
+  <header class="navbar">
+    <div class="brand">
+      <div class="logo">HR</div>
+      <div><div style="font-weight:700">HR Planner</div></div>
+    </div>
+    <nav class="nav-links" aria-label="Main navigation">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="employees.html">Employees</a>
+      <a href="attendance.html">Attendance</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="candidates.html">Candidates</a>
+      <a href="notifications.html">Notifications</a>
+      <button id="themeToggle">🌙</button>
+      <button class="btn small ghost" onclick="logout()">Logout</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <h2>Job Openings</h2>
+
+    <form id="jobForm" class="row" style="margin-bottom:12px;">
+      <input id="jobTitle" placeholder="Job title" required />
+      <input id="jobDept" placeholder="Department" />
+      <input id="jobDesc" placeholder="Short description" />
+      <button class="btn small" type="submit">Post Job</button>
+    </form>
+
+    <div id="jobsList"></div>
+  </main>
+
+  <script src="script.js" defer></script>
+</body>
+</html>

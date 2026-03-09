@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reports - HR Planner</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <nav class="navbar">
+    <h2>HR Planner</h2>
+    <div class="nav-links">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="employees.html">Employees</a>
+      <a href="attendance.html">Attendance</a>
+      <a href="tasks.html">Tasks</a>
+      <a href="reports.html">Reports</a>
+      <a href="jobs.html">Jobs</a>
+      <a href="candidates.html">Candidates</a>
+      <a href="notifications.html">Notifications</a>
+      <button id="themeToggle">🌙</button>
+      <button onclick="logout()">Logout</button>
+    </div>
+  </nav>
+  <div class="container">
+    <h2>Reports</h2>
+    <section class="card">
+      <h3>Attendance Summary (by date)</h3>
+      <p>Use the Attendance page to add records; this report aggregates them.</p>
+      <pre id="attendanceReport"></pre>
+      <button class="btn" onclick="document.getElementById('attendanceReport').textContent = JSON.stringify(generateAttendanceSummary(), null, 2)">Generate Attendance Summary</button>
+    </section>
+
+    <section class="card">
+      <h3>Employee Details Export</h3>
+      <button class="btn" onclick="downloadJSON(getEmployees(),'employees-export.json')">Download JSON</button>
+    </section>
+  </div>
+  <script src="script.js"></script>
+  <script>
+    function downloadJSON(obj, filename) {
+      const blob = new Blob([JSON.stringify(obj, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a'); a.href = url; a.download = filename; a.click(); URL.revokeObjectURL(url);
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,898 @@
+/* Enhanced UI stylesheet
+   Base provided CSS preserved and extended with innovative effects:
+   - glassmorphism, neumorphism, animated gradients, floating action button
+   - skeleton loaders, toast notifications, tooltips, chips, progress bars
+   - custom scrollbars, accessible focus states, motion-reduce support
+*/
+
+/* ========== BASE RESET & THEME VARS ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+:root {
+  /* Colors */
+  --bg-color: #f4f6f9;
+  --text-color: #111827;
+  --card-bg: #ffffff;
+  --primary: #0078d7;
+  --primary-dark: #005fa3;
+  --danger: #e53935;
+  --success: #4CAF50;
+  --warning: #FFC107;
+  --muted: #6b7280;
+
+  /* Derived/alias */
+  --primary-color: var(--primary);
+
+  /* Grays & surfaces */
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 6px 18px rgba(0,0,0,0.10);
+  --shadow-lg: 0 18px 40px rgba(0,0,0,0.12);
+
+  /* Radii & spacing */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --space: 16px;
+
+  /* Motion */
+  --transition: 240ms cubic-bezier(.2,.9,.2,1);
+  --fast-transition: 120ms cubic-bezier(.2,.9,.2,1);
+
+  /* Typography scale */
+  --type-xs: 12px;
+  --type-sm: 14px;
+  --type-md: 16px;
+  --type-lg: 20px;
+  --type-xl: 28px;
+  --type-xxl: 36px;
+}
+
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color var(--transition), color var(--transition);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark theme variables */
+body.dark {
+  --bg-color: linear-gradient(180deg, #0f1720 0%, #121217 100%);
+  --text-color: #e6eef6;
+  --card-bg: rgba(255,255,255,0.03);
+  --gray-100: #0f1720;
+  --gray-200: #131316;
+  --gray-300: #202024;
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.5);
+  --shadow-md: 0 10px 30px rgba(0,0,0,0.55);
+  --shadow-lg: 0 28px 60px rgba(0,0,0,0.6);
+}
+
+/* Respect user's reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  :root { --transition: 0ms; --fast-transition: 0ms; }
+  * { animation-duration: 0ms !important; animation-delay: 0ms !important; transition-duration: 0ms !important; }
+}
+
+/* ========== ANIMATED BACKGROUND MOOD ========== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: -20%;
+  z-index: -2;
+  background: radial-gradient(800px 400px at 10% 10%, color-mix(in srgb, var(--primary) 8%, transparent) 0%, transparent 20%),
+              radial-gradient(600px 300px at 90% 80%, color-mix(in srgb, var(--primary-dark) 6%, transparent) 0%, transparent 20%);
+  opacity: 0.9;
+  filter: blur(60px);
+  transform: translateZ(0);
+  transition: opacity var(--transition);
+  pointer-events: none;
+}
+@keyframes gradientShift {
+  0% { transform: translate3d(-3%, -2%, 0) scale(1); }
+  50% { transform: translate3d(3%, 2%, 0) scale(1.02); }
+  100% { transform: translate3d(-3%, -2%, 0) scale(1); }
+}
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -3;
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
+  pointer-events: none;
+  animation: gradientShift 18s linear infinite;
+  opacity: 0.7;
+}
+
+/* ========== NAVBAR / HEADER ========== */
+.navbar {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  padding: 14px var(--space);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  box-shadow: var(--shadow-md);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  gap: 12px;
+}
+.navbar .brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand .logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0.06));
+  display: grid;
+  place-items: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.12), inset 0 -6px 18px rgba(255,255,255,0.02);
+  font-weight: 700;
+  color: white;
+}
+
+/* Nav links polished */
+.nav-links a, .nav-links button {
+  margin: 0 6px;
+  color: white;
+  text-decoration: none;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: transform var(--fast-transition), background var(--fast-transition);
+}
+.nav-links a:hover, .nav-links button:hover {
+  transform: translateY(-2px);
+  background: rgba(255,255,255,0.08);
+}
+
+/* ========== LOGIN CONTAINER (IMPROVED) ========== */
+.login-body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  padding: calc(var(--space) * 2);
+}
+.login-container {
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.82));
+  backdrop-filter: blur(6px) saturate(120%);
+  padding: 36px;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 12px 40px rgba(2,6,23,0.12);
+  text-align: center;
+  width: 360px;
+  animation: slideUp 420ms cubic-bezier(.2,.9,.2,1);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.login-container h1 {
+  color: var(--primary);
+  margin-bottom: 20px;
+  font-size: var(--type-xl);
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 10px rgba(0,120,215,0.08);
+}
+.login-container input {
+  width: 100%;
+  margin: 12px 0;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-300);
+  background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(250,250,250,0.95));
+  transition: box-shadow var(--fast-transition), border-color var(--fast-transition);
+}
+
+/* floating label helper */
+.form-field {
+  position: relative;
+}
+.form-field label {
+  position: absolute;
+  left: 14px;
+  top: 12px;
+  font-size: var(--type-sm);
+  color: var(--muted);
+  pointer-events: none;
+  transition: transform var(--fast-transition), font-size var(--fast-transition), top var(--fast-transition);
+}
+.form-field input:focus + label,
+.form-field input:not(:placeholder-shown) + label {
+  transform: translateY(-130%);
+  font-size: 11px;
+  top: 6px;
+  color: var(--primary);
+}
+
+/* ========== CARDS & GRID ========== */
+.dashboard {
+  padding: 20px;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+/* Neumorphic + glass hybrid card */
+.card {
+  position: relative;
+  background: linear-gradient(180deg, var(--card-bg), color-mix(in srgb, var(--card-bg) 96%, var(--gray-100)));
+  padding: 20px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.03);
+  backdrop-filter: blur(2px) saturate(110%);
+}
+
+/* subtle highlight bar */
+.card::before {
+  content: '';
+  position: absolute;
+  top: -30%;
+  left: -20%;
+  width: 160%;
+  height: 120%;
+  background: linear-gradient(120deg, rgba(255,255,255,0.06), rgba(255,255,255,0.00));
+  transform: rotate(-10deg);
+  transition: transform 700ms ease;
+  pointer-events: none;
+}
+.card:hover::before { transform: translateX(6%) rotate(-10deg); opacity: 1; }
+
+.card:hover {
+  transform: translateY(-6px) scale(1.01);
+  box-shadow: var(--shadow-lg);
+}
+.card h3 { color: var(--primary); margin-bottom: 12px; font-size: var(--type-md); }
+.card p { font-size: 22px; font-weight: 700; margin: 6px 0; color: color-mix(in srgb, var(--text-color) 85%, transparent); }
+
+/* ========== BUTTONS (UPGRADED) ========== */
+.btn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  font-weight: 600;
+  transition: transform var(--fast-transition), box-shadow var(--fast-transition), opacity var(--fast-transition);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 6px 20px rgba(2,120,215,0.18);
+}
+.btn.small { padding: 8px 12px; border-radius: 8px; font-size: var(--type-sm); }
+.btn.ghost {
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid color-mix(in srgb, var(--primary) 12%, transparent);
+  box-shadow: none;
+}
+.btn:active { transform: translateY(1px) scale(0.998); box-shadow: 0 6px 14px rgba(0,0,0,0.06); }
+
+/* ripple-ish press (pure css) */
+.btn::after {
+  content: '';
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  top: -10%;
+  left: -10%;
+  background: radial-gradient(circle, rgba(255,255,255,0.14) 10%, transparent 10.01%);
+  transform: scale(8);
+  opacity: 0;
+  transition: transform 400ms ease, opacity 400ms ease;
+}
+.btn:active::after { transform: scale(0.6); opacity: 1; transition: 0s; }
+
+/* danger */
+.btn.danger { background: linear-gradient(180deg, var(--danger), color-mix(in srgb, var(--danger) 85%, black)); }
+
+/* ========== SEARCH / FILTER (GLASS) ========== */
+.search-bar {
+  display: flex;
+  gap: 16px;
+  margin: 16px 0;
+  align-items: center;
+}
+.search {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(255,255,255,0.5));
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid rgba(0,0,0,0.04);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.04);
+}
+.search input {
+  border: none;
+  background: transparent;
+  padding: 10px;
+  width: 320px;
+  color: var(--text-color);
+  outline: none;
+}
+
+/* suggestion dropdown */
+.search-suggestions {
+  position: absolute;
+  background: var(--card-bg);
+  margin-top: 8px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  min-width: 240px;
+  z-index: 50;
+}
+.search-suggestions li {
+  padding: 10px 12px;
+  cursor: pointer;
+  color: var(--muted);
+}
+.search-suggestions li:hover {
+  background: color-mix(in srgb, var(--primary) 6%, var(--card-bg));
+  color: var(--text-color);
+}
+
+/* ========== NOTIFICATIONS & TOASTS ========== */
+.notif {
+  background: var(--card-bg);
+  padding: 16px;
+  margin-bottom: 12px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-200);
+  transition: all var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.notif .time { font-size: 0.9em; color: color-mix(in srgb, var(--text-color) 60%, transparent); }
+.notif.read { opacity: 0.65; transform: translateX(4px); }
+
+/* toast system */
+.toast-wrap {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+}
+.toast {
+  background: linear-gradient(180deg, var(--card-bg), color-mix(in srgb, var(--card-bg) 95%, var(--primary)));
+  padding: 12px 16px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 260px;
+  border: 1px solid rgba(0,0,0,0.04);
+  transform-origin: right bottom;
+  animation: toastIn 320ms var(--fast-transition);
+}
+@keyframes toastIn {
+  from { transform: translateY(8px) scale(.98); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* ========== SKELETON LOADER ========== */
+.skeleton {
+  background: linear-gradient(90deg, rgba(255,255,255,0.06) 10%, rgba(255,255,255,0.12) 30%, rgba(255,255,255,0.06) 60%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s linear infinite;
+  border-radius: 8px;
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* ========== FLOATING ACTION BUTTON ========== */
+.fab {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 64px;
+  height: 64px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+  color: #fff;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 18px 40px rgba(2,120,215,0.18);
+  cursor: pointer;
+  z-index: 60;
+  transition: transform var(--fast-transition), box-shadow var(--fast-transition);
+}
+.fab:hover { transform: translateY(-6px) scale(1.02); box-shadow: 0 28px 60px rgba(2,120,215,0.20); }
+
+/* popout radial action menu */
+.fab-menu {
+  position: absolute;
+  right: 0;
+  bottom: 84px;
+  display: grid;
+  gap: 10px;
+  align-items: center;
+  transform-origin: right bottom;
+}
+
+/* ========== MODALS ========== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2,6,23,0.45);
+  display: grid;
+  place-items: center;
+  z-index: 1000;
+  padding: 24px;
+}
+.modal {
+  width: min(720px, 96%);
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+/* ========== TOOLTIP ========== */
+.tooltip {
+  position: relative;
+  cursor: pointer;
+}
+.tooltip[data-tip]:after {
+  content: attr(data-tip);
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  padding: 6px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 160ms ease;
+}
+.tooltip:hover[data-tip]:after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ========== TAGS / CHIPS ========== */
+.chips { display:flex; gap:8px; flex-wrap:wrap; }
+.chip {
+  background: color-mix(in srgb, var(--primary) 8%, var(--card-bg));
+  color: var(--primary);
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 13px;
+  border: 1px solid color-mix(in srgb, var(--primary) 8%, transparent);
+  transition: transform var(--fast-transition), background var(--fast-transition);
+}
+.chip:active { transform: translateY(1px); }
+
+/* ========== PROGRESS BAR ========== */
+.progress {
+  height: 10px;
+  background: color-mix(in srgb, var(--card-bg) 90%, var(--gray-200));
+  border-radius: 999px;
+  overflow: hidden;
+  box-shadow: inset 0 -2px 6px rgba(0,0,0,0.03);
+}
+.progress > i {
+  display: block;
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  transition: width var(--transition);
+}
+
+/* ========== TABLES POLISH ========== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--card-bg);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+thead th {
+  background: color-mix(in srgb, var(--card-bg) 95%, var(--primary));
+  padding: 12px 16px;
+  font-weight: 600;
+  text-align: left;
+  color: var(--primary);
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+tbody tr:nth-child(odd) { background: color-mix(in srgb, var(--card-bg) 98%, var(--gray-100)); }
+tbody tr:hover { background: color-mix(in srgb, var(--primary) 2%, var(--card-bg)); transform: none; }
+
+/* ========== FORMS & INPUT FOCUS ========== */
+form input, form select, form textarea {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--gray-300);
+  background: var(--card-bg);
+  color: var(--text-color);
+  transition: all var(--fast-transition);
+  width: 100%;
+}
+form input:focus, form select:focus, form textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 6px 20px rgba(2,120,215,0.12);
+}
+
+/* accessible focus ring for keyboard users */
+:focus {
+  outline: none;
+}
+:focus-visible {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 16%, transparent);
+  border-radius: 8px;
+}
+
+/* ========== AVATARS / PRESENCE ========== */
+.avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  overflow: hidden;
+  display: inline-grid;
+  place-items: center;
+  background: linear-gradient(180deg, rgba(255,255,255,0.7), rgba(255,255,255,0.2));
+  border: 1px solid rgba(0,0,0,0.04);
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* presence indicator */
+.avatar .presence {
+  position: absolute;
+  right: 2px;
+  bottom: 2px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  border: 2px solid var(--card-bg);
+  background: var(--success);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.14);
+}
+
+/* ========== CUSTOM SCROLLBAR ========== */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--primary) 18%, transparent);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+
+/* ========== RESPONSIVE TWEAKS =
+@media (max-width: 768px) {
+  .nav-links { display:flex; gap:10px; flex-wrap:wrap; }
+  .cards { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  .login-container { width: 92%; padding: 28px; }
+  .search input { width: 100%; max-width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .navbar { flex-direction: column; text-align: center; gap: 12px; padding: 12px; border-radius: 0 0 12px 12px; }
+  .nav-links { justify-content: center; gap: 8px; }
+  .card { padding: 14px; border-radius: 12px; }
+  form .row { flex-direction: column; gap: 12px; }
+  .fab { right: 14px; bottom: 14px; width: 56px; height: 56px; }
+}
+
+/* ========== SMALL MICRO-INTERACTIONS ========== */
+/* subtle floating animation for cards labeled float */
+.float {
+  animation: floaty 6s ease-in-out infinite;
+}
+@keyframes floaty {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0); }
+}
+
+/* pop / attention pulse for badges */
+.attention {
+  position: relative;
+}
+.attention::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.06), transparent 10%);
+  opacity: 0;
+  transition: opacity 320ms;
+}
+.attention:hover::after { opacity: 1; }
+
+/* ========== CLEAN UTILITY CLASSES ========== */
+.u-center { display:flex; align-items:center; justify-content:center; }
+.u-gap { gap: var(--space); }
+.text-muted { color: var(--muted); font-size: var(--type-sm); }
+.small { font-size: var(--type-sm); }
+
+/* ========== END OF ENHANCEMENTS ========== *//* Small extras to match the animated script (ripple, toasts container, small spacing) */
+
+/* Ensure toast-wrap exists and sits above other UI */
+.toast-wrap {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 9999;
+  pointer-events: none;
+}
+.toast {
+  pointer-events: auto;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-width: 240px;
+  background: linear-gradient(180deg, var(--card-bg), color-mix(in srgb, var(--card-bg) 95%, var(--primary)));
+  padding: 10px 12px;
+  border-radius: 10px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(0,0,0,0.04);
+}
+
+/* button ripple helper (cleanup) */
+.btn-ripple {
+  position: absolute;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* small visual for avatar icons in toasts */
+.toast .avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  flex: 0 0 36px;
+}
+
+/* Small responsive tweaks for pages */
+.container { max-width: 1100px; margin: 18px auto; padding: 0 16px; }
+
+/* ensure table cells have comfortable padding on small screens */
+table th, table td { padding: 10px 12px; }
+
+/* subtle focus states for form inputs */
+input:focus, select:focus, textarea:focus {
+  box-shadow: 0 8px 20px rgba(2,120,215,0.08);
+  border-color: var(--primary);
+}
+
+/* make .fab more prominent on mobile */
+@media (max-width: 480px) {
+  .fab { width:56px; height:56px; right:14px; bottom:14px; font-size:20px; }
+}
+/* Improvements: better contrast, more effects, subtle 3D tilt, sheen animation,
+   animated gradient headings, improved focus and high-contrast support.
+   Include this after styles.css (or merge into it).
+*/
+
+/* Theme helpers */
+:root {
+  --on-primary: #ffffff;
+  --muted-2: color-mix(in srgb, var(--text-color) 60%, transparent);
+  --sheen: rgba(255,255,255,0.12);
+}
+
+/* NAVBAR contrast fix */
+.navbar {
+  color: var(--on-primary);
+}
+.navbar .nav-links a,
+.navbar .nav-links button,
+.navbar .brand .logo,
+.navbar .brand > div {
+  color: var(--on-primary) !important;
+}
+
+/* Ensure nav link hover underline is visible on primary */
+.nav-links a::after {
+  background: color-mix(in srgb, var(--on-primary) 90%, transparent);
+}
+
+/* Inputs & placeholders: increase contrast */
+input::placeholder,
+textarea::placeholder {
+  color: color-mix(in srgb, var(--text-color) 40%, transparent);
+  opacity: 1;
+}
+
+/* Make form text always use text-color for readability */
+.login-container,
+.login-container input,
+.login-container .form-field label,
+.login-container p,
+.login-container a,
+.login-container .demo-note {
+  color: var(--text-color);
+}
+
+/* If login container sits on a dark background (dark mode) ensure contrast */
+body.dark .login-container,
+body.dark .modal,
+body.dark table,
+body.dark .card {
+  color: var(--text-color);
+}
+
+/* Animated gradient headings */
+.gradient-text {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark), #7b61ff);
+  background-size: 300% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradientMove 6s linear infinite;
+}
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Sheen effect for cards and buttons */
+.card, .btn {
+  position: relative;
+  overflow: visible;
+}
+.card::after, .btn::before {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(120deg, transparent 30%, var(--sheen) 40%, transparent 60%);
+  transform: translateX(-100%) rotate(15deg);
+  transition: transform 650ms cubic-bezier(.2,.9,.2,1), opacity 400ms;
+  opacity: 0;
+}
+.card:hover::after, .btn:hover::before {
+  transform: translateX(0) rotate(15deg);
+  opacity: 1;
+}
+
+/* Stronger focus and accessible outlines */
+:focus-visible {
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--primary) 20%, transparent);
+  border-radius: 8px;
+}
+
+/* 3D tilt on cards (interactive via script.js effects helper) */
+/* Provide a graceful static fallback for devices without pointer/motion */
+.cards { perspective: 1200px; }
+.card {
+  transform-style: preserve-3d;
+  transition: transform 280ms cubic-bezier(.2,.9,.2,1), box-shadow 280ms;
+  will-change: transform;
+}
+.card.tilt {
+  box-shadow: 0 20px 50px rgba(2,6,23,0.12);
+}
+
+/* sheen micro animation for attention */
+.attention { position: relative; }
+.attention::after {
+  content: '';
+  position: absolute;
+  inset: -6px;
+  border-radius: 10px;
+  background: radial-gradient(circle at 10% 10%, rgba(255,255,255,0.06), transparent 10%);
+  opacity: 0;
+  transition: opacity 320ms;
+}
+.attention.pulse {
+  animation: attentionPulse 1600ms ease-in-out infinite;
+}
+@keyframes attentionPulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.06); opacity: 0.92; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* animated demo-note on login */
+.login-container .demo-note {
+  font-size: 0.95em;
+  opacity: 0.95;
+  display: inline-block;
+  transform-origin: left center;
+  transition: transform 420ms cubic-bezier(.2,.9,.2,1);
+}
+.login-container .demo-note:hover {
+  transform: translateY(-4px) scale(1.01);
+}
+
+/* contrast fixes for primary/ghost buttons in dark mode */
+.btn.ghost {
+  color: var(--primary);
+  border-color: color-mix(in srgb, var(--primary) 16%, transparent);
+}
+body.dark .btn.ghost {
+  color: color-mix(in srgb, var(--on-primary) 94%, transparent);
+  border-color: color-mix(in srgb, var(--on-primary) 14%, transparent);
+}
+
+/* table row hover stronger color (improve visibility) */
+tbody tr:hover {
+  background: color-mix(in srgb, var(--primary) 6%, var(--card-bg));
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--primary) 6%, transparent);
+}
+
+/* toast improvements: ensure text readable on all themes */
+.toast {
+  color: var(--text-color);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--card-bg) 98%, white), var(--card-bg));
+  border: 1px solid color-mix(in srgb, var(--primary) 6%, transparent);
+}
+
+/* responsive smaller font fixes */
+@media (max-width: 480px) {
+  .card h3 { font-size: 16px; }
+  .login-container h1 { font-size: 22px; }
+}
+
+/* accessibility: high contrast user preference */
+@media (prefers-contrast: more) {
+  :root {
+    --shadow-lg: 0 30px 60px rgba(0,0,0,0.45);
+  }
+  .card, .btn, .navbar {
+    box-shadow: var(--shadow-lg);
+    border-color: rgba(0,0,0,0.12);
+  }
+  .card, table, .login-container {
+    background: color-mix(in srgb, var(--card-bg) 95%, black);
+  }
+}
+
+/* small utility to force readable text on dark primary backgrounds */
+.bg-primary-on { color: var(--on-primary) !important; }
+
+/* end of improvements */
